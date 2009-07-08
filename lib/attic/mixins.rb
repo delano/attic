@@ -1,0 +1,3 @@
+
+require 'attic/mixins/object'
+
