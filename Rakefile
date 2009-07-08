@@ -10,7 +10,7 @@ task :default => :package
 # CONFIG =============================================================
 
 # Change the following according to your needs
-README = "README.txt"
+README = "README.rdoc"
 CHANGES = "CHANGES.txt"
 LICENSE = "LICENSE.txt"
 

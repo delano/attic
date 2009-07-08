@@ -36,7 +36,7 @@
   s.files = %w(
   CHANGES.txt
   LICENSE.txt
-  README.txt
+  README.rdoc
   Rakefile
   attic.gemspec
   )
