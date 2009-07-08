@@ -1,0 +1,18 @@
+= Attic - v0.2 
+
+A place for Ruby objects to hide instance variables.
+
+== Installation
+
+One of:
+
+* `$ gem install attic`
+* `$ gem install delano-attic --source http://gems.github.com/`
+
+== Credits
+
+* Delano (@solutious.com)
+
+== License
+
+See: LICENSE.txt
