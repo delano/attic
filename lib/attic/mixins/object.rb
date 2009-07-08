@@ -7,10 +7,11 @@ class Object
   
   # A convenient method for getting the metaclass of the current object.
   # i.e.
+  #
   #     class << self; self; end;
   #
   def metaclass; class << self; self; end; end
-  
+
   # Execute a block +&blk+ within the metaclass of the current object.
   def meta_eval &blk; metaclass.instance_eval &blk; end
   
@@ -23,8 +24,22 @@ class Object
   
   # Add a class method called +name+ for the current object's class. This
   # isn't so special but it maintains consistency with meta_def. 
-  def self.class_def name, &blk
+  def class_def name, &blk
     class_eval { define_method name, &blk }
   end
 
+  
+  # A convenient method for getting the metaclass of the metaclass
+  # i.e.
+  #
+  #     self.metaclass.metaclass
+  #
+  def metametaclass; self.metaclass.metaclass; end
+
+  def metameta_eval &blk; metametaclass.instance_eval &blk; end
+
+  def metameta_def name, &blk
+    metameta_eval { define_method name, &blk }
+  end
+  
 end
