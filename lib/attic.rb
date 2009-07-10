@@ -13,14 +13,20 @@ module Attic
   end
   
   def attic *junk
-    return metametaclass if junk.empty?
-    
-    junk.each do |a|
-      metameta_def a do
-        instance_variable_get "@#{a}"
-      end
-      metameta_def "#{a}=" do |val|
-        instance_variable_set "@#{a}", val
+    return superclass.metaclass if junk.empty?
+
+    attr_accessor *junk
+
+    meta_def :initialize do
+      junk.each do |a|
+        
+        meta_def a do
+          instance_variable_get "@#{a}"
+        end
+        meta_def "#{a}=" do |val|
+          instance_variable_set "@#{a}", val
+        end
+         
       end
     end
   end

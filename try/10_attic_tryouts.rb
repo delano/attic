@@ -1,6 +1,6 @@
 group "Attic"
 library :attic, "lib"
-tryouts "Basic API" do
+tryouts "Basics" do
   
   drill "can extend Attic", true do
     class ::Worker
@@ -12,23 +12,20 @@ tryouts "Basic API" do
   drill "can't include Attic raises exception", :exception, RuntimeError do
     class ::Worker
       include Attic
-      
-      attic :hidden
     end
   end
   
-
-  
-  drill "save an instance variable the long way", 'S&F' do
+  drill "can define attic attribute", true do
+    Worker.attic :size
     w = Worker.new
-    w.metametaclass.instance_variable_set '@mattress', 'S&F'
-    w.metametaclass.instance_variable_get '@mattress'
+    #w.attic :size
+    stash :methods, w.methods.sort
+    stash :metamethods, Worker.methods.sort
+    w.respond_to? :size
   end
   
-  drill "instance variables are hidden", [] do
-    w = Worker.new
-    w.metametaclass.instance_variable_set '@mattress', 'S&F'
-    w.instance_variables
+  drill "has size" do
   end
   
 end
+
