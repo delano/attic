@@ -12,20 +12,13 @@ tryouts "Basics" do
     :any.metaclass
   end
   
+  ## NOTE: fails
   drill "Symbol instances don't cross streams", true do
     Symbol.extend Attic
     Symbol.attic :name
     a = :any
     a.name = :roger
     [a.name, :another.name]
-  end
-  
-  drill "String instances don't cross streams", false do
-    String.extend Attic
-    String.attic :name
-    a = "any"
-    a.name = :roger
-    a.name == "".name
   end
   
 end

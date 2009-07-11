@@ -25,6 +25,14 @@ tryouts "String Setting and Getting" do
     s.goodies
   end
   
+  drill "String instances don't cross streams", false do
+    String.extend Attic
+    String.attic :name
+    a = "any"
+    a.name = :roger
+    a.name == "".name
+  end
+  
   
       
 end
