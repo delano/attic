@@ -24,8 +24,5 @@ tryouts "Basics" do
     w.respond_to? :size
   end
   
-  drill "has size" do
-  end
-  
 end
 

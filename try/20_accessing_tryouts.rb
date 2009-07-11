@@ -21,11 +21,14 @@ tryouts "Setting and Getting" do
     w.size
   end
   
+  drill "new instances don't cross streams", nil do
+    w = Worker.new
+    w.size
+  end
+  
   drill "instance variables are hidden", [] do
     w = Worker.new
     w.metametaclass.instance_variable_set '@mattress', 'S&F'
     w.instance_variables
   end
-  
-  
 end
