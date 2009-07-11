@@ -1,4 +1,4 @@
-= Attic - v0.2 
+= Attic - v0.2
 
 A place for Ruby objects to hide instance variables.
 

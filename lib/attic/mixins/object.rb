@@ -5,12 +5,24 @@
 # See: http://whytheluckystiff.net/articles/seeingMetaclassesClearly.html
 class Object
   
+  # An Array of classes which do not have metaclasses.
+  NOMETACLASS = [Symbol, Fixnum].freeze
+  
   # A convenient method for getting the metaclass of the current object.
   # i.e.
   #
   #     class << self; self; end;
   #
-  def metaclass; class << self; self; end; end
+  # NOTE: Some Ruby class do not have meta classes (see: NOMETACLASS). 
+  # For these classes, this method returns the class itself. That means
+  # the instance variables will stored in the class itself. 
+  def metaclass;
+    if NOMETACLASS.member? self.class
+      self.class
+    else
+      class << self; self; end; 
+    end
+  end
 
   # Execute a block +&blk+ within the metaclass of the current object.
   def meta_eval &blk; metaclass.instance_eval &blk; end
