@@ -1,7 +1,7 @@
 @spec = Gem::Specification.new do |s|
 	s.name = "attic"
   s.rubyforge_project = "attic"
-	s.version = "0.3"
+	s.version = "0.3.1"
 	s.summary = "A place for Ruby objects to hide instance variables."
 	s.description = s.summary
 	s.author = "Delano Mandelbaum"
@@ -39,6 +39,15 @@
   README.rdoc
   Rakefile
   attic.gemspec
+  lib/attic.rb
+  lib/attic/mixins.rb
+  lib/attic/mixins/object.rb
+  try/01_mixins_tryouts.rb
+  try/10_attic_tryouts.rb
+  try/20_accessing_tryouts.rb
+  try/25_string_tryouts.rb
+  try/30_nometaclass_tryouts.rb
+  try/metaclasses.rb
   )
   
   s.has_rdoc = true
