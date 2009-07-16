@@ -27,6 +27,33 @@ module Attic
     end
   end
   
+  @@nometaclass_proc = proc { |klass,name|
+    klass.class_eval do
+      define_method(name) do
+        instance_variable_get("@__attic_#{name}")
+      end
+      define_method("#{name}=") do |val|
+        instance_variable_set("@__attic_#{name}", val)
+      end
+      define_method :instance_variables do |*args|
+        ret = super *args
+        ret.reject! { |v| v.to_s =~ /^@__attic/ }
+        ret
+      end
+    end
+  }
+  
+  @@metaclass_proc = proc { |klass,name|
+    klass.class_eval do
+      define_method(name) do
+        metaclass.instance_variable_get("@#{name}")
+      end
+      define_method("#{name}=") do |val|
+        metaclass.instance_variable_set("@#{name}", val)
+      end
+    end
+  }
+  
   # A class method for defining variables to store in the attic. 
   # * +junk+ is a list of variables names. Accessor methods are 
   #   created for each variable name in the list. 
@@ -51,15 +78,10 @@ module Attic
     # disturb the metaclass instance variables. 
     metametaclass.instance_variable_set("@attic", [attic_vars, *junk].flatten)
     
-    junk.each do |name|
-      class_eval do
-        define_method(name) do
-          metaclass.instance_variable_get("@#{name}")
-        end
-        define_method("#{name}=") do |val|
-          metaclass.instance_variable_set("@#{name}", val)
-        end
-      end
+    processor = metaclass? ? @@metaclass_proc : @@nometaclass_proc
+    
+    junk.each do |var|
+      processor.call(self, var)
     end
     
     attic_vars

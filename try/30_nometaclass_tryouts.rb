@@ -9,16 +9,25 @@ tryouts "Basics" do
   end
   
   drill "Symbol metaclass returns Symbol", Symbol do
-    :any.metaclass
+   :any.metaclass
   end
   
   ## NOTE: fails
-  drill "Symbol instances don't cross streams", true do
+  drill "Symbol instances don't cross streams", [:roger, nil] do
     Symbol.extend Attic
     Symbol.attic :name
     a = :any
     a.name = :roger
     [a.name, :another.name]
+  end
+  
+  drill "metaclass? method exists", true do
+    Symbol.extend Attic
+    :any.respond_to? :metaclass?
+  end
+  
+  drill "metaclass? method is false for a Symbol", false do
+    :any.metaclass?
   end
   
 end

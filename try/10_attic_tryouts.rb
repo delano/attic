@@ -14,15 +14,16 @@ tryouts "Basics" do
       include Attic
     end
   end
-  
+
   drill "can define attic attribute", true do
     Worker.attic :size
     w = Worker.new
     #w.attic :size
-    stash :methods, w.methods.sort
+    stash :instance_methods, Worker.instance_methods(false)
     stash :metamethods, Worker.methods.sort
     w.respond_to? :size
   end
   
 end
+
 

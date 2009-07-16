@@ -1,3 +1,5 @@
+class NoMetaClass < RuntimeError
+end
 
 # = Object
 #
@@ -8,6 +10,12 @@ class Object
   # An Array of classes which do not have metaclasses.
   NOMETACLASS = [Symbol, Fixnum].freeze
   
+  def metaclass?
+    !NOMETACLASS.member?(self)
+  end
+  
+  # FIX: metaclass should check self or self.class? ??? Check previous version
+  
   # A convenient method for getting the metaclass of the current object.
   # i.e.
   #
@@ -16,8 +24,9 @@ class Object
   # NOTE: Some Ruby class do not have meta classes (see: NOMETACLASS). 
   # For these classes, this method returns the class itself. That means
   # the instance variables will stored in the class itself. 
-  def metaclass;
-    if NOMETACLASS.member? self.class
+  def metaclass
+    if !self.class.metaclass?
+      #raise NoMetaClass, self
       self.class
     else
       class << self; self; end; 
