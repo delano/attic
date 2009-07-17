@@ -27,24 +27,15 @@ module Attic
     end
   end
   
-  @@nometaclass_proc = proc { |klass,name|
-    klass.class_eval do
-      define_method(name) do
-        instance_variable_get("@__attic_#{name}")
-      end
-      define_method("#{name}=") do |val|
-        instance_variable_set("@__attic_#{name}", val)
-      end
-      define_method :instance_variables do |*args|
-        ret = super *args
-        ret.reject! { |v| v.to_s =~ /^@__attic/ }
-        ret
-      end
-    end
-  }
-  
+  # Create instance methods that store variables in the metaclass. 
   @@metaclass_proc = proc { |klass,name|
     klass.class_eval do
+      # Add the attic variables named to the list. Notice that we
+      # cheakily store this in the metameta class so as to not 
+      # disturb the metaclass instance variables. 
+      vars = attic_vars << name
+      metametaclass.instance_variable_set("@attic", vars)
+      
       define_method(name) do
         metaclass.instance_variable_get("@#{name}")
       end
@@ -53,6 +44,30 @@ module Attic
       end
     end
   }
+  
+  # Create instance methods that store variables in unlikely instance vars.
+  @@nometaclass_proc = proc { |klass,name|
+    klass.class_eval do
+      # Add the attic variables named to the list. Notice that we
+      # cheakily store this in the metameta class so as to not 
+      # disturb the metaclass instance variables. 
+      vars = attic_vars << name
+      instance_variable_set("@___attic_vars", vars)
+      
+      define_method(name) do
+        instance_variable_get("@__attic_#{name}")
+      end
+      define_method("#{name}=") do |val|
+        instance_variable_set("@__attic_#{name}", val)
+      end
+      define_method :instance_variables do |*args|
+        ret = super *args
+        ret.reject! { |v| v.to_s =~ /^@___?attic/ }  # match 2 or 3 underscores
+        ret
+      end
+    end
+  }
+
   
   # A class method for defining variables to store in the attic. 
   # * +junk+ is a list of variables names. Accessor methods are 
@@ -67,16 +82,12 @@ module Attic
   #     String.attic :timestamp
   #
   # In this example, attic created two instance methods:
-  # * +String#timestamp+ for getting the value
-  # * +String#timestamp+ for setting the value
+  # * <tt>String#timestamp</tt> for getting the value
+  # * <tt>String#timestamp</tt> for setting the value
   #
   def attic *junk
+    #p [:attic, self, metaclass?]
     return metaclass if junk.empty?
-    
-    # Add the attic variables named to the list. Notice that we
-    # cheakily store this in the metameta class so as to not 
-    # disturb the metaclass instance variables. 
-    metametaclass.instance_variable_set("@attic", [attic_vars, *junk].flatten)
     
     processor = metaclass? ? @@metaclass_proc : @@nometaclass_proc
     
@@ -95,7 +106,11 @@ module Attic
   #     String.attic_vars           # => [:timestamp]
   #
   def attic_vars
-    metametaclass.instance_variable_get("@attic") || []
+    if metaclass?
+      metametaclass.instance_variable_get("@attic") || []
+    else
+      instance_variable_get("@___attic_vars") || []
+    end
   end
   
   

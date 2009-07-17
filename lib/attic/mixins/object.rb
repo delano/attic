@@ -11,6 +11,7 @@ class Object
   NOMETACLASS = [Symbol, Fixnum].freeze
   
   def metaclass?
+    #p [:metaclass?, self, !NOMETACLASS.member?(self)]
     !NOMETACLASS.member?(self)
   end
   
@@ -25,6 +26,7 @@ class Object
   # For these classes, this method returns the class itself. That means
   # the instance variables will stored in the class itself. 
   def metaclass
+    #p [:metaclass, self, self.class, self.class.metaclass?]
     if !self.class.metaclass?
       #raise NoMetaClass, self
       self.class

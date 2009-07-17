@@ -1,5 +1,11 @@
 ATTIC, CHANGES
 
+#### 0.4.0 (2009-07-17) ###############################
+
+* ADDED: Support for objects that don't have metaclasses:
+  Currently: Symbols, Fixnum
+
+
 #### 0.3.1 (2009-07-13) ###############################
 
 CRIPES! I'd forgotten to update the gemspec. 

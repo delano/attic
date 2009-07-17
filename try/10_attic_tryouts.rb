@@ -6,7 +6,8 @@ tryouts "Basics" do
     class ::Worker
       extend Attic
     end
-    Worker.methods.member? :attic
+    # 1.9                             # 1.8
+    Worker.methods.member?(:attic) || Worker.methods.member?('attic')
   end
   
   drill "can't include Attic raises exception", :exception, RuntimeError do

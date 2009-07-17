@@ -27,7 +27,7 @@ tryouts "Basics" do
   end
   
   drill "metaclass? method is false for a Symbol", false do
-    :any.metaclass?
+    :any.class.metaclass?
   end
   
 end
