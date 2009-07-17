@@ -6,7 +6,7 @@ require 'attic/mixins'
 # A place to store instance variables. 
 #
 module Attic
-  VERSION = '0.3.1'
+  VERSION = '0.4.0'
   
   def self.included(o)
     raise "You probably meant to 'extend Attic' in #{o}"
