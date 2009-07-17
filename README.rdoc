@@ -4,9 +4,7 @@ A place for Ruby objects to hide instance variables.
 
 == Alpha Notice
 
-This library is fresh (est 2009-07-06) and barely tested. It's fun to use but not reliable yet. In particular:
-
-* Does not work with Symbols or Fixnum object
+This library is fresh (est 2009-07-06) and barely tested. It's fun to use but not reliable yet.
 
 == Example
 
@@ -19,8 +17,13 @@ This library is fresh (est 2009-07-06) and barely tested. It's fun to use but no
     a.timestamp = "1980-11-18"
     a.instance_variables          # => []
     a.timestamp                   # 1980-11-18
-    
-    
+
+ 
+== Some objects have no metaclasses
+
+Symbol and Fixnum objects do not have metaclasses so instance variables are hidden in the object itself.
+
+
 == Installation
 
 Via Rubygems, one of:

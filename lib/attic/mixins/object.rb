@@ -28,8 +28,7 @@ class Object
   def metaclass
     #p [:metaclass, self, self.class, self.class.metaclass?]
     if !self.class.metaclass?
-      #raise NoMetaClass, self
-      self.class
+      raise NoMetaClass, self
     else
       class << self; self; end; 
     end

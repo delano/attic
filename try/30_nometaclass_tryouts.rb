@@ -8,7 +8,8 @@ tryouts "Basics" do
     Object::NOMETACLASS
   end
   
-  drill "Symbol metaclass returns Symbol", Symbol do
+  dream :exception, NoMetaClass
+  drill "Symbol metaclass raises exception" do
    :any.metaclass
   end
   

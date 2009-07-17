@@ -48,9 +48,8 @@ module Attic
   # Create instance methods that store variables in unlikely instance vars.
   @@nometaclass_proc = proc { |klass,name|
     klass.class_eval do
-      # Add the attic variables named to the list. Notice that we
-      # cheakily store this in the metameta class so as to not 
-      # disturb the metaclass instance variables. 
+      # Add the attic variables named to the list. We use a 
+      # variable with 3 underscores to prevent collisions. 
       vars = attic_vars << name
       instance_variable_set("@___attic_vars", vars)
       
