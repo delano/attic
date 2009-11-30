@@ -5,6 +5,7 @@ tryouts "Basics" do
   drill "can extend Attic", true do
     class ::Worker
       extend Attic
+      def kind() :true end
     end
     # 1.9                             # 1.8
     Worker.methods.member?(:attic) || Worker.methods.member?('attic')
@@ -29,6 +30,12 @@ tryouts "Basics" do
     w = Worker.new
     w.attic_variable_set :size, 2
     w.attic_variable_get :size
+  end
+  
+  drill "won't define a method if on already exists", :true do
+    Worker.attic :kind
+    a = Worker.new
+    a.kind
   end
   
 end

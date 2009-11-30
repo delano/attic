@@ -88,13 +88,15 @@ module Attic
       next if attic_variable? name
       self.attic_variables << name
       
-      #unless method_defined?
-      
-      define_method(name) do
-        attic_variable_get name
+      unless method_defined? name
+        define_method(name) do
+          attic_variable_get name
+        end
       end
-      define_method("#{name}=") do |val|
-        attic_variable_set name, val
+      unless method_defined? "#{name}="
+        define_method("#{name}=") do |val|
+          attic_variable_set name, val
+        end
       end
     end
     attic_vars
