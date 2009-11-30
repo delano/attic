@@ -5,6 +5,8 @@ ATTIC, CHANGES
 
 * FIXED: Classes can now only be extended once
 * FIXED: Don't define the same attic variable more then once
+* FIXED: Don't define instance_variable method for objects which 
+  don't already have one. 
 * CHANGE: attic_vars method is now attic_variables
 * CHANGE: Won't define accessor methods if methods with the same 
   name already exist.  

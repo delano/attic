@@ -51,14 +51,16 @@ module Attic
         attic_vars = self.attic_variables.clone
         o2.metaclass.instance_variable_set("@attic_variables", attic_vars)
       end
-      old_instance_variables = instance_method(:instance_variables)
-      define_method :instance_variables do
-        ret = old_instance_variables.bind(self).call.clone
-        ret.reject! { |v| v.to_s =~ /^@___?attic/ }  # match 2 or 3 underscores
-        ret
-      end
-      define_method :all_instance_variables do
-        old_instance_variables.bind(self).call
+      if method_defined? :instance_variables
+        old_instance_variables = instance_method(:instance_variables)
+        define_method :instance_variables do
+          ret = old_instance_variables.bind(self).call.clone
+          ret.reject! { |v| v.to_s =~ /^@___?attic/ }  # match 2 or 3 underscores
+          ret
+        end
+        define_method :all_instance_variables do
+          old_instance_variables.bind(self).call
+        end
       end
     end
   
