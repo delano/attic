@@ -49,4 +49,8 @@ tryouts "Basics" do
   end
   
   
+  drill "knows attic variables", [:name] do
+    Symbol.attic_variables
+  end
+  
 end

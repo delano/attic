@@ -83,11 +83,10 @@ module Attic
   # * <tt>String#timestamp</tt> for setting the value
   #
   def attic *junk
-    #p [:attic, self, metaclass?]
     return metaclass if junk.empty?
     junk.each do |name|
+      next if attic_variable? name
       self.attic_variables << name
-      #attic_variable_set(:attic_vars, vars)
       
       #unless method_defined?
       
