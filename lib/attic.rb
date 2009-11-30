@@ -13,7 +13,11 @@ module Attic
       self.class.attic_variables
     end
     alias_method :attic_vars, :attic_variables
+    def attic_variable? n
+      self.class.attic_variable? n
+    end
     def attic_variable_set(n,v)
+      attic_variables << n unless attic_variable? n
       if metaclass?
         metaclass.instance_variable_set("@#{n}", v)
       else

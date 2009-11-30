@@ -23,3 +23,5 @@ p [a.respond_to?(:andy), b.respond_to?(:andy)] # true, true
 p [a.andy, b.andy]                             # 1, 2
 
 p [a.class.attic_vars, b.class.attic_vars, c.class.attic_vars]  
+
+

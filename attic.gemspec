@@ -2,7 +2,7 @@
 	s.name = "attic"
   s.rubyforge_project = "attic"
 	s.version = "0.4.0"
-	s.summary = "A place for Ruby objects to hide instance variables."
+	s.summary = "A place to hide private instance variables in your Ruby objects."
 	s.description = s.summary
 	s.author = "Delano Mandelbaum"
 	s.email = "delano@solutious.com"
@@ -46,6 +46,9 @@
   try/20_accessing_tryouts.rb
   try/25_string_tryouts.rb
   try/30_nometaclass_tryouts.rb
+  try/40_explicit_accessor_tryouts.rb
+  try/X1_metaclasses.rb
+  try/X2_extending.rb
   )
   
   s.has_rdoc = true

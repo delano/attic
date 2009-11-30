@@ -1,23 +1,27 @@
-= Attic - v0.4 ALPHA
+= Attic - v0.5
 
-A place for Ruby objects to hide instance variables.
-
-== Alpha Notice
-
-This library is fresh (est 2009-07-06) and barely tested. It's fun to use but not reliable yet.
+A place to hide private instance variables in your Ruby objects.
 
 == Example
 
     require 'attic'
     
-    String.extend Attic
-    String.attic :timestamp
+    class String
+      extend Attic
+      attic :timestamp
+    end
     
     a = "anything"
     a.timestamp = "1980-11-18"
-    a.instance_variables          # => []
-    a.timestamp                   # 1980-11-18
-
+    a.instance_variables                      # => []
+    a.timestamp                               # 1980-11-18
+                                              
+    a.attic_variables                         # => [:timestamp]
+    
+    a.attic_variable_set :tags, [:a, :b, :c]
+    a.attic_variable_get :tags                # [:a, :b, :c]
+    
+    a.attic_variables                         # => [:timestamp, :tags]
  
 == Some objects have no metaclasses
 
@@ -29,7 +33,6 @@ Symbol and Fixnum objects do not have metaclasses so instance variables are hidd
 Via Rubygems, one of:
 
     $ gem install attic
-    $ gem install delano-attic --source http://gems.github.com/
 
 or via download:
 * attic-latest.tar.gz[http://github.com/delano/attic/tarball/latest]
