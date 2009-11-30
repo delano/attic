@@ -6,7 +6,7 @@ require 'attic/mixins'
 # A place to store instance variables. 
 #
 module Attic
-  VERSION = '0.4.0' unless defined?(VERSION)
+  VERSION = '0.5.1' unless defined?(VERSION)
   
   module InstanceMethods
     def attic_variables
@@ -39,7 +39,8 @@ module Attic
   
   def self.extended(o)
     # This class has already been extended. 
-    return if o.metaclass.instance_variable_get("@attic_variables")
+    return if o.ancestors.member? Attic::InstanceMethods
+    
     
     ## NOTE: This is just a reminder for a more descerning way to 
     ## include the meta methods, instead of using a global mixin. 
@@ -48,10 +49,12 @@ module Attic
     ##end
     # Create an instance method that returns the attic variables. 
     o.send :include, Attic::InstanceMethods
+    #p [:extend, self, o]
     
     o.metaclass.instance_variable_set("@attic_variables", [])
     o.class_eval do
       def self.inherited(o2)
+        #p [:inherit, self, o2]
         attic_vars = self.attic_variables.clone
         o2.metaclass.instance_variable_set("@attic_variables", attic_vars)
       end
@@ -116,7 +119,9 @@ module Attic
   #     String.attic_variables     # => [:timestamp]
   #
   def attic_variables
-    self.metaclass.instance_variable_get("@attic_variables")
+    a = self.metaclass.instance_variable_get("@attic_variables")
+    a ||= self.metaclass.instance_variable_set("@attic_variables", [])
+    a
   end
   alias_method :attic_vars, :attic_variables
 

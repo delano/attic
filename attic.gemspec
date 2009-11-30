@@ -1,7 +1,7 @@
 @spec = Gem::Specification.new do |s|
 	s.name = "attic"
   s.rubyforge_project = "attic"
-	s.version = "0.4.0"
+	s.version = "0.5.1"
 	s.summary = "A place to hide private instance variables in your Ruby objects."
 	s.description = s.summary
 	s.author = "Delano Mandelbaum"
