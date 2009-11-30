@@ -1,5 +1,5 @@
 group "Mixins"
-library :attic, 'lib'
+library :attic, "lib"
 
 tryouts "Object" do
   if Tryouts.sysinfo.ruby == "1.9.1"

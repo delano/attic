@@ -6,67 +6,65 @@ require 'attic/mixins'
 # A place to store instance variables. 
 #
 module Attic
-  VERSION = '0.4.0'
+  VERSION = '0.4.0' unless defined?(VERSION)
+  
+  module InstanceMethods
+    def attic_variables
+      self.class.attic_variables
+    end
+    alias_method :attic_vars, :attic_variables
+    def attic_variable_set(n,v)
+      if metaclass?
+        metaclass.instance_variable_set("@#{n}", v)
+      else
+        instance_variable_set("@___attic_#{n}", v)
+      end
+    end
+    def attic_variable_get(n)
+      if metaclass?
+        metaclass.instance_variable_get("@#{n}")
+      else
+        instance_variable_get("@___attic_#{n}")
+      end
+    end
+  end
   
   def self.included(o)
     raise "You probably meant to 'extend Attic' in #{o}"
   end
   
   def self.extended(o)
+    # This class has already been extended. 
+    return if o.metaclass.instance_variable_get("@attic_variables")
+    
     ## NOTE: This is just a reminder for a more descerning way to 
     ## include the meta methods, instead of using a global mixin. 
     ##o.class_eval do
     ##  include ObjectHelpers
     ##end
-    
     # Create an instance method that returns the attic variables. 
+    o.send :include, Attic::InstanceMethods
+    
+    o.metaclass.instance_variable_set("@attic_variables", [])
     o.class_eval do
-      define_method :attic_vars do
-        self.class.attic_vars
+      def self.inherited(o2)
+        attic_vars = self.attic_variables.clone
+        o2.metaclass.instance_variable_set("@attic_variables", attic_vars)
       end
-    end
-  end
-  
-  # Create instance methods that store variables in the metaclass. 
-  @@metaclass_proc = proc { |klass,name|
-    klass.class_eval do
-      # Add the attic variables named to the list. Notice that we
-      # cheakily store this in the metameta class so as to not 
-      # disturb the metaclass instance variables. 
-      vars = attic_vars << name
-      metametaclass.instance_variable_set("@attic", vars)
-      
-      define_method(name) do
-        metaclass.instance_variable_get("@#{name}")
-      end
-      define_method("#{name}=") do |val|
-        metaclass.instance_variable_set("@#{name}", val)
-      end
-    end
-  }
-  
-  # Create instance methods that store variables in unlikely instance vars.
-  @@nometaclass_proc = proc { |klass,name|
-    klass.class_eval do
-      # Add the attic variables named to the list. We use a 
-      # variable with 3 underscores to prevent collisions. 
-      vars = attic_vars << name
-      instance_variable_set("@___attic_vars", vars)
-      
-      define_method(name) do
-        instance_variable_get("@__attic_#{name}")
-      end
-      define_method("#{name}=") do |val|
-        instance_variable_set("@__attic_#{name}", val)
-      end
-      define_method :instance_variables do |*args|
-        ret = super *args
+      old_instance_variables = instance_method(:instance_variables)
+      define_method :instance_variables do
+        ret = old_instance_variables.bind(self).call.clone
         ret.reject! { |v| v.to_s =~ /^@___?attic/ }  # match 2 or 3 underscores
         ret
       end
+      define_method :all_instance_variables do
+        old_instance_variables.bind(self).call
+      end
     end
-  }
-
+  
+    
+  end
+  
   
   # A class method for defining variables to store in the attic. 
   # * +junk+ is a list of variables names. Accessor methods are 
@@ -87,13 +85,19 @@ module Attic
   def attic *junk
     #p [:attic, self, metaclass?]
     return metaclass if junk.empty?
-    
-    processor = metaclass? ? @@metaclass_proc : @@nometaclass_proc
-    
-    junk.each do |var|
-      processor.call(self, var)
+    junk.each do |name|
+      self.attic_variables << name
+      #attic_variable_set(:attic_vars, vars)
+      
+      #unless method_defined?
+      
+      define_method(name) do
+        attic_variable_get name
+      end
+      define_method("#{name}=") do |val|
+        attic_variable_set name, val
+      end
     end
-    
     attic_vars
   end
   
@@ -102,16 +106,16 @@ module Attic
   #
   #     String.extend Attic
   #     String.attic :timestamp
-  #     String.attic_vars           # => [:timestamp]
+  #     String.attic_variables     # => [:timestamp]
   #
-  def attic_vars
-    if metaclass?
-      metametaclass.instance_variable_get("@attic") || []
-    else
-      instance_variable_get("@___attic_vars") || []
-    end
+  def attic_variables
+    self.metaclass.instance_variable_get("@attic_variables")
   end
-  
+  alias_method :attic_vars, :attic_variables
+
+  def attic_variable?(n)
+    attic_variables.member? n
+  end
   
 end
 

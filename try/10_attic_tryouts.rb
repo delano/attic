@@ -25,6 +25,12 @@ tryouts "Basics" do
     w.respond_to? :size
   end
   
+  drill "can access attic attributes explicitly", 2 do
+    w = Worker.new
+    w.attic_variable_set :size, 2
+    w.attic_variable_get :size
+  end
+  
 end
 
 

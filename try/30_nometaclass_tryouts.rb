@@ -1,5 +1,5 @@
 group "No Meta Class"
-library :attic, 'lib'
+library :attic, "lib"
 tryouts "Basics" do
   
   dream :class, Array
@@ -13,13 +13,12 @@ tryouts "Basics" do
    :any.metaclass
   end
   
-  ## NOTE: fails
   drill "Symbol instances don't cross streams", [:roger, nil] do
     Symbol.extend Attic
     Symbol.attic :name
-    a = :any
+    a, b = :symbol1, :symbol2
     a.name = :roger
-    [a.name, :another.name]
+    [a.name, b.name]
   end
   
   drill "metaclass? method exists", true do
@@ -28,7 +27,26 @@ tryouts "Basics" do
   end
   
   drill "metaclass? method is false for a Symbol", false do
-    :any.class.metaclass?
+    :any.metaclass?
   end
+  
+  dream [:@___attic_name]
+  drill "A Symbol's attic vars appear in all_instance_variables" do
+    Symbol.extend Attic
+    Symbol.attic :name
+    a, b = :symbol1, :symbol2
+    a.name = :roger
+    a.all_instance_variables
+  end
+  
+  dream []
+  drill "A Symbol's attic vars do not appear in instance_variables" do
+    Symbol.extend Attic
+    Symbol.attic :name
+    a, b = :symbol1, :symbol2
+    a.name = :roger
+    a.instance_variables
+  end
+  
   
 end
