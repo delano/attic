@@ -6,7 +6,7 @@ require 'attic/mixins'
 # A place to store instance variables. 
 #
 module Attic
-  VERSION = '0.5.1' unless defined?(VERSION)
+  VERSION = '0.5.2' unless defined?(VERSION)
   
   module InstanceMethods
     def attic_variables
