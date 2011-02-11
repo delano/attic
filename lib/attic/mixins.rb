@@ -7,8 +7,10 @@ end
 # See: http://whytheluckystiff.net/articles/seeingMetaclassesClearly.html
 class Object
   
-  # An Array of classes which do not have metaclasses.
-  NOMETACLASS = [Symbol, Fixnum].freeze
+  unless defined?(::Object::NOMETACLASS)
+    # An Array of classes which do not have metaclasses.
+    NOMETACLASS = [Symbol, Fixnum].freeze
+  end
   
   def nometaclass?
     NOMETACLASS.member?(self)
