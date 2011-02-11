@@ -4,6 +4,7 @@ ATTIC, CHANGES
 
 * FIXED: Don't redefine Object::NOMETACLASS
 * CHANGE: Updated tests to Tryouts 2
+* CHANGE: Move attic/mixins content to attic.rb
 
 
 #### 0.5.2 (2010-02-15) ###############################

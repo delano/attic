@@ -35,7 +35,6 @@
   Rakefile
   attic.gemspec
   lib/attic.rb
-  lib/attic/mixins.rb
   try/01_mixins_tryouts.rb
   try/10_attic_tryouts.rb
   try/20_accessing_tryouts.rb
