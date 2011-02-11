@@ -22,11 +22,6 @@
   # Update --main to reflect the default page to display
   s.rdoc_options = ["--line-numbers", "--title", s.summary, "--main", "README.rdoc"]
   
-  # = DEPENDENCIES =
-  # Add all gem dependencies
-  #s.add_dependency 'name1'
-  #s.add_dependency 'name2', '>= 0.0.0'
-  
   # = MANIFEST =
   # The complete list of files to be included in the release. When GitHub packages your gem, 
   # it doesn't allow you to run any command that accesses the filesystem. You will get an

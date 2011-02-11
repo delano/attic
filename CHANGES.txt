@@ -3,6 +3,8 @@ ATTIC, CHANGES
 #### 0.5.3 (2011-02-11) ###############################
 
 * FIXED: Don't redefine Object::NOMETACLASS
+* CHANGE: Updated tests to Tryouts 2
+
 
 #### 0.5.2 (2010-02-15) ###############################
 

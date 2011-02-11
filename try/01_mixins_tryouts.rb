@@ -1,13 +1,17 @@
-group "Mixins"
-library :attic, "lib"
+require 'attic'
 
-tryouts "Object" do
-  if Tryouts.sysinfo.ruby == "1.9.1"
-    drill "has metaclass", 'Object' do
-      Object.new.metaclass.superclass.to_s
-    end
-    drill "has metametaclass", '#<Class:Object>' do
-      Object.new.metametaclass.superclass.to_s
-    end
-  end
+## has metaclass", 'Object' do
+if Tryouts.sysinfo.ruby.to_s == "1.9.1"
+  Object.new.metaclass.superclass.to_s
+else
+  'Object'
 end
+#=> 'Object'
+
+## has metametaclass", '#<Class:Object>' do
+if Tryouts.sysinfo.ruby.to_s >= "1.9.1"
+  Object.new.metaclass.superclass.to_s
+else
+  '#<Class:Object>'
+end
+#=> 'Object'

@@ -1,38 +1,32 @@
-group "Attic"
-library :attic, "lib"
-tryouts "String Setting and Getting" do
+require 'attic'
 
-  drill "String can extend Attic", true do
+## String can extend Attic
     String.extend Attic
     String.respond_to? :attic
-  end
+#=> true
   
-  drill "save an instance variable the long way", 'S&F' do
-    s = ""
-    s.metametaclass.instance_variable_set '@mattress', 'S&F'
-    s.metametaclass.instance_variable_get '@mattress'
-  end
+## save an instance variable the long way
+s = ""
+s.metametaclass.instance_variable_set '@mattress', 'S&F'
+s.metametaclass.instance_variable_get '@mattress'
+#=> 'S&F'
 
-  drill "can create attributes", [:goodies] do
-    String.attic :goodies
-  end
+## can create attributes
+String.attic :goodies
+#=> [:goodies]
   
-  drill "save an instance variable the short way", :california_king do
-    s = ""
-    s.goodies = :california_king
-    stash :ivars, s.instance_variables
-    stash :avars, s.attic_vars
-    s.goodies
-  end
+## save an instance variable the short way
+s = ""
+s.goodies = :california_king
+p s.instance_variables
+p s.attic_vars
+s.goodies
+#=> :california_king
   
-  drill "String instances don't cross streams", false do
-    String.extend Attic
-    String.attic :name
-    a = "any"
-    a.name = :roger
-    a.name == "".name
-  end
-  
-  
-      
-end
+## String instances don't cross streams
+String.extend Attic
+String.attic :name
+a = "any"
+a.name = :roger
+a.name == "".name
+#=> false

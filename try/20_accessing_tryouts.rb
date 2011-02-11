@@ -1,34 +1,29 @@
-group "Attic"
-library :attic, "lib"
-tryouts "Setting and Getting" do
-  
-  setup do
-    class ::Worker
-      extend Attic
-      attic :size
-    end
-  end
-  
-  drill "save an instance variable the long way", 'S&F' do
-    w = Worker.new
-    w.metametaclass.instance_variable_set '@mattress', 'S&F'
-    w.metametaclass.instance_variable_get '@mattress'
-  end
-  
-  drill "save an instance variable the short way", :california_king do
-    w = Worker.new
-    w.size = :california_king
-    w.size
-  end
-  
-  drill "new instances don't cross streams", nil do
-    w = Worker.new
-    w.size
-  end
-  
-  drill "instance variables are hidden", [] do
-    w = Worker.new
-    w.metametaclass.instance_variable_set '@mattress', 'S&F'
-    w.instance_variables
-  end
+require 'attic'
+class ::Worker
+  extend Attic
+  attic :size
 end
+
+  
+## save an instance variable the long way
+w = Worker.new
+w.metametaclass.instance_variable_set '@mattress', 'S&F'
+w.metametaclass.instance_variable_get '@mattress'
+#=> 'S&F'
+  
+## save an instance variable the short way
+w = Worker.new
+w.size = :california_king
+w.size
+#=> :california_king
+  
+## new instances don't cross streams
+w = Worker.new
+w.size
+#=> nil
+  
+## instance variables are hidden
+w = Worker.new
+w.metametaclass.instance_variable_set '@mattress', 'S&F'
+w.instance_variables
+## []
