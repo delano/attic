@@ -10,6 +10,7 @@ GEM
     pry-doc (1.1.0)
       pry (~> 0.11)
       yard (~> 0.9.11)
+    rake (13.0.6)
     storable (0.8.9)
     sysinfo (0.8.1)
       drydock
@@ -24,6 +25,7 @@ PLATFORMS
 DEPENDENCIES
   pry
   pry-doc
+  rake (>= 13.0.6)
   tryouts
 
 BUNDLED WITH

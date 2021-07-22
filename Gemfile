@@ -9,3 +9,5 @@ group "development" do
   gem "pry-doc"
   gem "tryouts"
 end
+
+gem "rake", ">=13.0.6"

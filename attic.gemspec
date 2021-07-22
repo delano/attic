@@ -11,19 +11,35 @@
   s.extra_rdoc_files = %w[README.md]
   s.rdoc_options = ["--line-numbers", "--title", s.summary, "--main", "README.md"]
   s.files = %w(
-    CHANGES.txt
-    LICENSE.txt
-    README.rdoc
+    README.md
     Rakefile
     attic.gemspec
     lib/attic.rb
-    try/01_mixins_tryouts.rb
-    try/10_attic_tryouts.rb
-    try/20_accessing_tryouts.rb
-    try/25_string_tryouts.rb
-    try/30_nometaclass_tryouts.rb
-    try/40_explicit_accessor_tryouts.rb
-    try/X1_metaclasses.rb
-    try/X2_extending.rb
   )
+end
+
+
+@spec = Gem::Specification.new do |s|
+  s.name = "storable"
+  s.version = "0.9-RC2"
+  s.summary = "Ruby classes as strings"
+  s.description = "Storable: Marshal Ruby classes into and out of multiple formats (yaml, json, csv, tsv)"
+  s.authors = ["Delano Mandelbaum"]
+  s.email = "gems@solutious.com"
+  s.homepage = "https://github.com/delano/storable/"
+  s.licenses = ["MIT"]  # https://spdx.org/licenses/MIT-Modern-Variant.html
+  s.executables = %w()
+  s.files = %w(
+    README.md
+    Rakefile
+    lib/core_ext.rb
+    lib/proc_source.rb
+    lib/storable.rb
+    lib/storable/orderedhash.rb
+    storable.gemspec
+  )
+  s.extra_rdoc_files = %w[README.md]
+  s.rdoc_options = ["--line-numbers", "--title", s.summary, "--main", "README.md"]
+  s.require_paths = %w[lib]
+  s.rubygems_version = '3.2.21'
 end
