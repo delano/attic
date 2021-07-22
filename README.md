@@ -43,6 +43,12 @@ or via download:
 * attic-latest.zip[http://github.com/delano/attic/zipball/latest]
 
 
-== Credits
+## Credits
 
 * `gems@solutious.com` (@delano)
+
+
+## License
+
+MIT
+
