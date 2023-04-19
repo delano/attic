@@ -218,3 +218,16 @@ end
 
 # - Module#instance_method returns an UnboundMethod
 #   - http://ruby-doc.org/core/classes/Module.html#M001659
+
+if defined?(IRB)
+  require 'irb/completion'
+  IRB.conf[:PROMPT][:ATTIC] = {
+    PROMPT_I: "attic> ",
+    PROMPT_S: "attic%l> ",
+    PROMPT_C: "attic* ",
+    RETURN:   "=> %s
+
+"
+  }
+  IRB.conf[:PROMPT_MODE] = :ATTIC
+end
