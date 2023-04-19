@@ -205,16 +205,15 @@ module Attic
   #     String.attic_variables     # => [:timestamp]
   #
   def attic_variables
-    a = self.metaclass.instance_variable_get("@attic_variables")
-    a ||= self.metaclass.instance_variable_set("@attic_variables", [])
+    a = metaclass.instance_variable_get('@attic_variables')
+    a ||= metaclass.instance_variable_set('@attic_variables', [])
     a
   end
-  alias_method :attic_vars, :attic_variables
+  alias attic_vars attic_variables
 
-  def attic_variable?(n)
-    attic_variables.member? n
+  def attic_variable?(name)
+    attic_variables.member? name
   end
-
 end
 
 # - Module#instance_method returns an UnboundMethod
