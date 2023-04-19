@@ -5,7 +5,7 @@
 	s.description = "Attic: a place to hide metadata about the class or variable itself (e.g. SHA hash summaries)."
 	s.author = "Delano Mandelbaum"
 	s.email = "gems@solutious.com"
-	s.homepage = "http://github.com/delano/attic"
+	s.homepage = "https://github.com/delano/attic"
   s.executables = %w[]
   s.require_paths = %w[lib]
   s.extra_rdoc_files = %w[README.md]
