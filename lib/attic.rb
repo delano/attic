@@ -1,11 +1,14 @@
+# Attic: A special place to store instance variables.
 
+# = NoMetaClass
+#
 class NoMetaClass < RuntimeError
 end
 
 # = Object
 #
 # These methods are copied directly from _why's metaid.rb.
-# See: http://whytheluckystiff.net/articles/seeingMetaclassesClearly.html
+# See: https://whytheluckystiff.net/hacking/seeingMetaclassesClearly.html
 class Object
 
   unless defined?(::Object::NOMETACLASS)
@@ -49,31 +52,30 @@ class Object
   end
 
   # Execute a block +&blk+ within the metaclass of the current object.
-  def meta_eval &blk
+  def meta_eval(&blk)
     metaclass.instance_eval blk
   end
 
   # Add an instance method called +name+ to metaclass for the current object.
   # This is useful because it will be available as a singleton method
   # to all subclasses too.
-  def meta_def name, &blk
+  def meta_def(name, &blk)
     meta_eval { define_method name, &blk }
   end
 
   # Add a class method called +name+ for the current object's class. This
   # isn't so special but it maintains consistency with meta_def.
-  def class_def name, &blk
+  def class_def(name, &blk)
     class_eval { define_method name, &blk }
   end
 
-
-  # A convenient method for getting the metaclass of the metaclass
+  # A convenient method for getting the metaclass of the metaclass.
   # i.e.
   #
   #     self.metaclass.metaclass
   #
   def metametaclass
-    self.metaclass.metaclass
+    metaclass.metaclass
   end
 
   def metameta_eval &blk
@@ -85,22 +87,23 @@ class Object
   end
 end
 
-
-
 # = Attic
 #
 # A place to store instance variables.
 #
 module Attic
-  VERSION = '0.6-RC1' unless defined?(VERSION)
+  VERSION = '0.6-RC1'.freeze unless defined?(VERSION)
 
+  # = Attic::InstanceMethods
+  #
   module InstanceMethods
     def attic_variables
       self.class.attic_variables
     end
-    alias_method :attic_vars, :attic_variables
-    def attic_variable? n
-      self.class.attic_variable? n
+    alias attic_vars attic_variables
+
+    def attic_variable? name
+      self.class.attic_variable? name
     end
     def attic_variable_set(n,v)
       attic_variables << n unless attic_variable? n
@@ -110,9 +113,14 @@ module Attic
     def attic_variable_get(n)
       metaclassfly.instance_variable_get("@___attic_#{n}")
     end
+
     def get_binding
       binding
     end
+  end
+
+  def self.attic_variables
+    @attic_variables
   end
 
   def self.included(o)
@@ -128,29 +136,29 @@ module Attic
 
     o.metaclass.instance_variable_set("@attic_variables", [])
     o.class_eval do
-      def self.inherited(o2)
+      def self.inherited(klass)
         attic_vars = self.attic_variables.clone
-        o2.metaclass.instance_variable_set("@attic_variables", attic_vars)
+        klass.metaclass.instance_variable_set("@attic_variables", attic_vars)
       end
       if method_defined? :instance_variables
-        old_instance_variables = instance_method(:instance_variables)
+        _instance_variables_orig = instance_method(:instance_variables)
         define_method :instance_variables do
-          ret = old_instance_variables.bind(self).call.clone
+          ret = _instance_variables_orig.bind(self).call.clone
           ret.reject! { |v| v.to_s =~ /^@___?attic/ }  # match 2 or 3 underscores
           ret
         end
         define_method :all_instance_variables do
-          old_instance_variables.bind(self).call
+          _instance_variables_orig.bind(self).call
         end
       end
     end
   end
 
   # A class method for defining variables to store in the attic.
-  # * +junk+ is a list of variables names. Accessor methods are
+  # * +names+ is a list of variables names. Accessor methods are
   #   created for each variable name in the list.
   #
-  # Returns the list of attic variable names or if not junk was
+  # Returns the list of attic variable names or if no names were
   # given, returns the metaclass.
   #
   # e.g.
@@ -162,18 +170,20 @@ module Attic
   # * <tt>String#timestamp</tt> for getting the value
   # * <tt>String#timestamp</tt> for setting the value
   #
-  def attic *junk
-    return metaclass if junk.empty?
-    junk.each do |name|
+  def attic *names
+    return metaclass if names.empty?
+    names.each do |name|
       next if attic_variable? name
+
       self.attic_variables << name
 
-      unless method_defined? name
+      unless method_defined?(name)
         define_method(name) do
           attic_variable_get name
         end
       end
-      unless method_defined? "#{name}="
+
+      unless method_defined?("#{name}=")
         define_method("#{name}=") do |val|
           attic_variable_set name, val
         end

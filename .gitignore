@@ -1,8 +1,10 @@
+*.csv
 *.log
 *.txt
-*.csv
-data/
-log/
-logs/
-pkg/
-tmp/
+.bundle
+.history
+data
+log
+logs
+pkg
+tmp
