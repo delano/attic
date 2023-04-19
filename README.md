@@ -1,6 +1,6 @@
-# Attic - v0.6-RC1 (2021-07-01)
+# Attic - v1.0-RC1 (2023-04-19)
 
-A place to hide private instance variables in your Ruby objects.
+A place to hide private instance variables in your Ruby objects: in the attic.
 
 ## Example
 
@@ -13,9 +13,9 @@ A place to hide private instance variables in your Ruby objects.
     end
 
     a = "anything"
-    a.timestamp = "1980-11-18"
+    a.timestamp = "1990-11-18"
     a.instance_variables                      # => []
-    a.timestamp                               # 1980-11-18
+    a.timestamp                               # 1990-11-18
 
     a.attic_variables                         # => [:timestamp]
 
@@ -25,30 +25,40 @@ A place to hide private instance variables in your Ruby objects.
     a.attic_variables                         # => [:timestamp, :tags]
 ```
 
-## Some objects have no metaclasses
+## More details
 
-Symbol objects do not have metaclasses so instance variables are hidden in the object itself.
+### Objects without singleton classes
 
+Symbol, Integer, Float, TrueClass, FalseClass, NilClass, and Fixnum are all objects that do not have singleton classes. TrueClass, FalseClass, and NilClass are all singletons themselves. Fixnum is a singleton of Integer.
+
+These objects do not have metaclasses so the attic is hidden in the object itself.
+
+### Play around with it
+
+```shell
+    $ irb -r attic
+```
 
 ## Installation
-
-Via Rubygems, one of:
 
 ```shell
     $ gem install attic
 ```
 
+```shell
+    $ bundle install attic
+```
+
 or via download:
-* attic-latest.tar.gz[http://github.com/delano/attic/tarball/latest]
-* attic-latest.zip[http://github.com/delano/attic/zipball/latest]
+* [attic-latest.tar.gz](https://github.com/delano/attic/tarball/latest)
+* [attic-latest.zip](https://github.com/delano/attic/zipball/latest)
 
 
 ## Credits
 
-* `gems@solutious.com` (@delano)
+* (@delano) Delano Mandelbaum
 
 
 ## License
 
 MIT
-
