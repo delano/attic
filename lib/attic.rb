@@ -42,13 +42,16 @@ class Object
     end
   end
 
-  def metaclassfly
-    location = self.class
-    attr_name = "@@_attic_#{self.object_id}"
-    unless location.class_variable_defined? attr_name
-      location.class_variable_set attr_name, Class.new
+  # A convenience
+  def metaclassified
+    klass = self.class
+    variable_name = "@@_attic_#{object_id}"
+
+    unless klass.class_variable_defined?(variable_name)
+      klass.class_variable_set(variable_name, klass.singleton_class)
     end
-    location.class_variable_get attr_name
+
+    klass.class_variable_get variable_name
   end
 
   # Execute a block +&blk+ within the metaclass of the current object.
@@ -105,13 +108,15 @@ module Attic
     def attic_variable? name
       self.class.attic_variable? name
     end
-    def attic_variable_set(n,v)
-      attic_variables << n unless attic_variable? n
-      # binding.pry
-      metaclassfly.instance_variable_set("@___attic_#{n}", v)
+
+    def attic_variable_set(name, val)
+      attic_variables << name unless attic_variable? name
+      require 'pry'; binding.pry
+      metaclassified.instance_variable_set("@___attic_#{name}", val)
     end
-    def attic_variable_get(n)
-      metaclassfly.instance_variable_get("@___attic_#{n}")
+
+    def attic_variable_get(name)
+      metaclassified.instance_variable_get("@___attic_#{name}")
     end
 
     def get_binding
