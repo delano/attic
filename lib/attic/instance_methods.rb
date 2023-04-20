@@ -2,8 +2,7 @@
 
 # = Attic::InstanceMethods
 #
-class Attic
-
+module Attic
   # Adds a few methods for object instances to access the
   # attic variables of their class.
   module InstanceMethods

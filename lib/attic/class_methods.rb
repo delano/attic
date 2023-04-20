@@ -1,8 +1,7 @@
 #
 # = Attic::ClassMethods
 #
-class Attic
-
+module Attic
   # Adds a few methods for accessing the metaclass of an
   # object. We do this with great caution since the Object
   # class is as global as it gets in Ruby.
