@@ -1,10 +1,13 @@
 *.csv
 *.log
 *.txt
+.DS_Store
 .bundle
 .history
+.ruby-version
+.vscode
+.devcontainer
 data
-log
-logs
+log*
 pkg
 tmp
