@@ -1,76 +1,78 @@
 # Attic: A special place to store instance variables.
 
-# = NoSingleton
-#
-class NoSingleton < RuntimeError
-  unless defined?(MEMBERS)
-    # A Set of classes which do not have singleton classes
-    # (i.e. meta classes). This is used to prevent an exception
-    # the first time an attic is accessed. It's populated
-    # dynamically at start time by simply checking whether
-    # the object has a singleton. This only needs to be
-    # done once per class.
-    #
-    # We use a set here to avoid having to deal with duplicate
-    # values. Realistically there are only a few classes that
-    # do not have singleton classes. We could hard code them
-    # here which is not lost on us.
-    #
-    MEMBERS = Set.new
-  end
-
-  # Check if the given object is a member of the NoSingleton
-  # members list. This checks for the object itself and all
-  # of its ancestors. See the docs for `Enumerable#===` for
-  # more details.
-  def self.member?(obj)
-    MEMBERS === obj
-  end
-
-  def self.add_member(obj)
-    MEMBERS.merge [self]
-  end
-end
-
 # = Attic
 #
-# Usage:
+# == Usage:
+#
 #  require 'attic'
 #  class MyClass
 #    include Attic
-#   attic :name, :age
+#    attic :name, :age
 #  end
 #
+#  obj = MyClass.new
+#  obj.attic.nickname = 'My Classic Automobile'
+#  obj.attic.secret_age  = 27
+#
+#  obj.nickname      #=> 'My Classic Automobile'
+#  obj.secret_age    #=> 27
+#  obj.to_h          #=> {}
+#
+#    OR
+#
+#  require 'attic'
+#  Attic.construct MyClass, :nickname, :secret_age
 #
 #
+# == Description:
 #
-# A few important notes: some objects are not capable of
-# constructing an attic. These are objects that do not have
-# a dedicated singleton class.
+# Attic is a module that allows you to store instance variables
+# in a dedicated singleton class. This is useful for storing
+# instance variables that you don't want to be available to
+# the public interface of your class. e.g. you want to store
+# a value for the running instance but want to prevent it
+# from being serialized.
 #
+# == Why?
 #
-# Calling attic on `Symbol, Integer, Float` are what ruby
+# == Important Notes:
+#
+# Some objects just straight up are not capable of contructing
+# an attic. `Symbols`, `Integers`, and `Floats` specifically do not
+# have a dedicated singleton classes. These are what ruby
 # internals refer to as "immediate values". They're special
 # in that they are not objects in the traditional sense.
 # They're just values (they're not even instances of a
 # class 😮‍💨).
+#
+# When you call attic on an immediate value you get an error.
 #
 # :sym.attic       #=> raises NoSingleton error
 # 1.attic          #=> Ditto
 # 1.0.1.attic      #=> Ditto again
 #
 #
-# Calling attic on `true, false, and nil` return their
-# class. Note: this means that they all share the same
-# "attic" class.
+# The other objects that do not have singleton classes are
+# `true`, `false`, and `nil`. Calling attic on these don't
+# raise an error but they simply return their class. This
+# is because they are all instances of their same singleton
+# class.
 #
 # true.attic       #=> TrueClass
 # false.attic      #=> FalseClass
 # nil.attic        #=> NilClass
 #
+# Note: this means that every instance of nil
+# returns the exact same singleton class. This is different
+# from the behaviour of all other objects.
 #
-# The behaviour is similar with NilClass, TrueClass,
-# and FalseClass. Calling attic on these classes returns
+# nil.attic.object_id   #=> 800
+# nil.attic.object_id   #=> 800
+#
+#
+# NilClass, TrueClass, and FalseClass on the otherhand each
+# have their own singleton class. Calling attic on these
+# returns the singleton class for each of them. But again
 # a singleton class for each of them but again they all
 #
 # TrueClass.attic  #=> #<Class:TrueClass>
@@ -94,99 +96,6 @@ end
 #
 module Attic
   VERSION = '0.6-RC1'.freeze unless defined?(VERSION)
-
-  # = Attic::InstanceMethods
-  #
-  module InstanceMethods
-    # def attic_variables
-    #   self.class.attic_variables
-    # end
-    # alias attic_vars attic_variables
-
-    # def attic_variable?(name)
-    #   self.class.attic_variable? name
-    # end
-    # alias attic_var? attic_variable?
-
-    # def attic_variable_set(name, val)
-    #   attic_variables << name unless attic_variable? name
-    #   attic.instance_variable_set("@___attic_#{name}", val)
-    # end
-    # alias attic_var_set attic_variable_set
-
-    # def attic_variable_get(name)
-    #   attic.instance_variable_get("@___attic_#{name}")
-    # end
-    # alias attic_var_get attic_variable_get
-  end
-
-  # = Attic::ConstructionMethods
-  #
-  # Adds a few methods for accessing the metaclass of an
-  # object. We do this with great caution since the Object
-  # class is as global as it gets in Ruby.
-  #
-  module ClassMethods
-    # A list of all the attic variables defined for this class.
-    attr_reader :attic_variables
-
-    # A quick way to check if the current object already has a
-    # dedicated singleton class. We want to know this because
-    # this is where our attic variables will be stored.
-    def attic?
-      return false if NoSingleton.member? self
-
-      # NOTE: Calling this on an object for the first time lazily
-      # creates a singleton class for itself. Another way of doing
-      # the same thing is to attempt defining a singleton method
-      # for the object. In either case, and exception is raised
-      # if the object cannot have a dedicated singleton class.
-      !self.singleton_class.nil?
-
-    rescue TypeError
-      # Remember for next time.
-      NoSingleton.add_member self
-      false
-    end
-
-    def attic(name)
-      name = name.normalize
-
-      self.attic_variables << name unless attic_variable? name
-
-      _safe_name = "@_attic_#{name}"
-      instance_variable_set(_safe_name, name)
-    end
-
-    def attic_variable?(name)
-      attic_variables.include? name.normalize
-    end
-
-    def attic_variable_set(name, val)
-      unless attic_variable? name
-        self.attic_variables << name.normalize
-      end
-      attic.instance_variable_set("@_attic_#{name}", val)
-    end
-
-    def attic_variable_get(name)
-      instance_variable_get("@_attic_#{name}")
-    end
-
-    protected
-
-    def normalize(name)
-      name.to_s.gsub(/\@[\?\!\=]$/, '_').to_sym
-    end
-    # def attic
-    #   raise NoSingleton, self, caller unless attic?
-    #
-    #   singleton_class
-    #
-    # rescue TypeError
-    #   NoSingleton.add_member self
-    # end
-  end
 
   # A convenince method at the class level for including
   # ConstructMethods in the given object specifically.
