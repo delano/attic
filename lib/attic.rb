@@ -1,27 +1,56 @@
 # Attic: A special place to store instance variables.
 
-# = NoMetaClass
+# = NoSingleton
 #
-class NoMetaClass < RuntimeError
+class NoSingleton < RuntimeError
+  unless defined?(MEMBERS)
+    # An Array of classes which do not have singleton classes
+    # (i.e. meta classes). This is used to prevent an exception
+    # the first time a metaclass is accessed. It's populated
+    # dynamically at start time by simply checking whether
+    # the object has a singleton. This only needs to be done
+    # once per class.
+    #
+    MEMBERS = Set.new # rubocop:disable Style/MutableConstant
+  end
+
+
 end
 
-# = Object
+# = AtticObjectMethods
 #
-# These methods are copied directly from _why's metaid.rb.
-# See: https://whytheluckystiff.net/hacking/seeingMetaclassesClearly.html
-class Object
+# Adds a few methods for accessing the metaclass of an
+# object. We do this with great caution since the Object
+# class is as global as it gets in Ruby.
+#
+# NOTE: This module can be included in the Object class
+module AtticObjectMethods
 
-  unless defined?(::Object::NOMETACLASS)
-    # An Array of classes which do not have metaclasses.
-    NOMETACLASS = [Symbol, Integer]
+  # A quick way to check if the current object already has a
+  # dedicated singleton class. We want to know this because
+  # this is where our attic variables will be stored.
+  def attic?
+    return false if NoSingleton::MEMBERS === self
+
+    # NOTE: Calling this on an object for the first time lazily
+    # creates a singleton class for itself. Another way of doing
+    # the same thing is to attempt defining a singleton method
+    # for the object. In either case, and exception is raised
+    # if the object cannot have a dedicated singleton class.
+    !self.singleton_class.nil?
+
+  rescue TypeError
+    NoSingleton::MEMBERS.merge [self]
+    false
   end
 
-  def nometaclass?
-    NOMETACLASS.member?(self)
-  end
+  def attic
+    raise NoSingleton, self, caller unless self.attic?
 
-  def metaclass?
-    !NOMETACLASS.member?(self.class)
+    self.singleton_class
+
+  rescue TypeError
+    NoSingleton::MEMBERS.merge [self]
   end
 
   # A convenient method for getting the metaclass of the current object.
@@ -29,35 +58,33 @@ class Object
   #
   #     class << self; self; end;
   #
-  # NOTE: Some Ruby class do not have meta classes (see: NOMETACLASS).
+  # NOTE: Some Ruby class do not have meta classes (see: MEMBERS).
   # For these classes, this method returns the class itself. That means
   # the instance variables will be stored in the class itself.
   def metaclass
-    if self.metaclass?
+    if self.attic?
       class << self
+        pp 1
         self
       end
     else
+      pp 2
       self
     end
   end
 
-  # A convenience
-  def metaclassified
-    klass = self.class
-    variable_name = "@@_attic_#{object_id}"
+  # A convenience method for ensuring that the metaclass of the current
+  # object is returned.
+  # def attic
+  #   klass = self.class
+  #   variable_name = "@@_attic_#{object_id}"
 
-    unless klass.class_variable_defined?(variable_name)
-      klass.class_variable_set(variable_name, klass.singleton_class)
-    end
+  #   unless klass.class_variable_defined?(variable_name)
+  #     klass.class_variable_set(variable_name, klass.singleton_class)
+  #   end
 
-    klass.class_variable_get variable_name
-  end
-
-  # Execute a block +&blk+ within the metaclass of the current object.
-  def meta_eval(&blk)
-    metaclass.instance_eval blk
-  end
+  #   klass.class_variable_get variable_name
+  # end
 
   # Add an instance method called +name+ to metaclass for the current object.
   # This is useful because it will be available as a singleton method
@@ -65,30 +92,8 @@ class Object
   def meta_def(name, &blk)
     meta_eval { define_method name, &blk }
   end
-
-  # Add a class method called +name+ for the current object's class. This
-  # isn't so special but it maintains consistency with meta_def.
-  def class_def(name, &blk)
-    class_eval { define_method name, &blk }
-  end
-
-  # A convenient method for getting the metaclass of the metaclass.
-  # i.e.
-  #
-  #     self.metaclass.metaclass
-  #
-  def metametaclass
-    metaclass.metaclass
-  end
-
-  def metameta_eval &blk
-    metametaclass.instance_eval blk
-  end
-
-  def metameta_def name, &blk
-    metameta_eval { define_method name, &blk }
-  end
 end
+
 
 # = Attic
 #
@@ -111,12 +116,11 @@ module Attic
 
     def attic_variable_set(name, val)
       attic_variables << name unless attic_variable? name
-      require 'pry'; binding.pry
-      metaclassified.instance_variable_set("@___attic_#{name}", val)
+      attic.instance_variable_set("@___attic_#{name}", val)
     end
 
     def attic_variable_get(name)
-      metaclassified.instance_variable_get("@___attic_#{name}")
+      attic.instance_variable_get("@___attic_#{name}")
     end
 
     def get_binding
@@ -219,15 +223,14 @@ end
 # - Module#instance_method returns an UnboundMethod
 #   - http://ruby-doc.org/core/classes/Module.html#M001659
 
+# Add some candy when we're in irb
 if defined?(IRB)
   require 'irb/completion'
   IRB.conf[:PROMPT][:ATTIC] = {
     PROMPT_I: "attic> ",
     PROMPT_S: "attic%l> ",
     PROMPT_C: "attic* ",
-    RETURN:   "=> %s
-
-"
+    RETURN:   "=> %s\n\n"
   }
   IRB.conf[:PROMPT_MODE] = :ATTIC
 end
