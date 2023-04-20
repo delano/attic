@@ -4,6 +4,11 @@ source 'https://rubygems.org'
 
 git_source(:github) { |repo_name| "https://github.com/#{repo_name}" }
 
+gem 'rake', '>=13.0.6'
+
+# bundle install --without production
+# bundle install --with development
+# bundle install --without development
 group 'development' do
   gem 'byebug'
   gem 'pry'
@@ -11,5 +16,3 @@ group 'development' do
   gem 'rubocop'
   gem 'tryouts'
 end
-
-gem 'rake', '>=13.0.6'
