@@ -1,8 +1,8 @@
 # Attic: A special place to store instance variables.
 
-require 'attic/class_methods'
-require 'attic/errors'
-require 'attic/instance_methods'
+require_relative "attic/class_methods"
+require_relative "attic/errors"
+require_relative "attic/instance_methods"
 
 # = Attic
 #
