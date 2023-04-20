@@ -1,0 +1,33 @@
+# https://docs.rubocop.org/rubocop/configuration.html
+# inherit_from: ../.rubocop.yml
+# inherit_from:
+#   - http://<personal_access_token>@raw.github.com/example/rubocop.yml
+
+AllCops:
+  TargetRubyVersion: 2.6, 2.7, 3.2
+  EnabledByDefault: false
+  NewCops: enable
+
+Style/StringLiterals:
+  Enabled: true
+  EnforcedStyle: double_quotes
+
+Style/StringLiteralsInInterpolation:
+  Enabled: true
+  EnforcedStyle: double_quotes
+
+Layout/LineLength:
+  Enabled: true
+  Max: 120
+
+Metrics/CyclomaticComplexity:
+  Enabled: false
+
+Layout/HashAlignment:
+  Enabled: false
+
+Lint/Void:
+  Enabled: false
+
+Metrics/MethodLength:
+  Enabled: false

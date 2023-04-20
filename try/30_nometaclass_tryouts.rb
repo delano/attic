@@ -1,13 +1,13 @@
 require 'attic'
 
 ## has list of no metaclass classes
-Object::NOMETACLASS
+NoSingleton::MEMBERS
 #=> [Symbol, Integer]
 
 ## Symbol metaclass does not raise an exception
 begin
   :any.metaclass.class
-rescue NoMetaClass
+rescue NoSingleton
   :failed
 end
 #=> Class
@@ -20,13 +20,13 @@ a.name = :roger
 [a.name, b.name]
 #=> [:roger, nil]
 
-## metaclass? method exists
+## attic? method exists
 Symbol.extend Attic
-:any.respond_to? :metaclass?
+:any.respond_to? :attic?
 #=> true
 
-## metaclass? method is false for a Symbol", false do
-:any.metaclass?
+## attic? method is false for a Symbol", false do
+:any.attic?
 #=> false
 
 ## A Symbol's attic vars appear in `all_instance_variables` do
