@@ -1,5 +1,9 @@
 # Attic: A special place to store instance variables.
 
+require 'attic/class_methods'
+require 'attic/errors'
+require 'attic/instance_methods'
+
 # = Attic
 #
 # == Usage:
