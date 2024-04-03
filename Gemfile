@@ -2,6 +2,8 @@
 
 source "https://rubygems.org"
 
+ruby '>= 3.1'
+
 git_source(:github) { |repo_name| "https://github.com/#{repo_name}" }
 
 # bundle install --without production
@@ -12,5 +14,5 @@ group "development" do
   gem "pry"
   gem "pry-doc"
   gem "rubocop"
-  gem "tryouts"
+  gem "tryouts", '2.2.0.pre.RC1'
 end

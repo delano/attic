@@ -100,7 +100,7 @@ require_relative "attic/instance_methods"
 # nil.attic.object_id #=> 800
 #
 module Attic
-  VERSION = '0.6-RC1'.freeze unless defined?(VERSION)
+  VERSION = '0.9.0-RC1'.freeze unless defined?(VERSION)
   attr_reader :all_attic_variables
 
   # A convenince method at the class level for including
