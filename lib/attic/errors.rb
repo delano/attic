@@ -1,6 +1,9 @@
 
 # Attic: A special place to store instance variables.
 
+class NoMetaClass < RuntimeError
+end
+
 # = NoSingletonError
 #
 # This error is raised when an attempt is made to access the
