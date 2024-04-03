@@ -56,5 +56,8 @@ DEPENDENCIES
   rubocop
   tryouts (= 2.2.0.pre.RC1)
 
+RUBY VERSION
+   ruby 3.1.4p223
+
 BUNDLED WITH
    2.5.7
