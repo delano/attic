@@ -13,28 +13,33 @@ module Attic
     # dedicated singleton class. We want to know this because
     # this is where our attic variables will be stored.
     def attic?
-      return false if NoSingleton.member? self
+      return false if NoSingletonError.member? self
 
       # NOTE: Calling this on an object for the first time lazily
       # creates a singleton class for itself. Another way of doing
       # the same thing is to attempt defining a singleton method
-      # for the object. In either case, and exception is raised
-      # if the object cannot have a dedicated singleton class.
-      !self.singleton_class.nil?
+      # for the object. In either case, objects that cannot have
+      # cannot have a dedicated singleton class (e.g. nil, true,
+      # false) will raise a TypeError. We rescue this and add the
+      # object to the NoSingletonError list so we don't have to
+      # keep trying to access its singleton class.
+      !singleton_class.nil?
 
     rescue TypeError
       # Remember for next time.
-      NoSingleton.add_member self
+      NoSingletonError.add_member self
       false
     end
 
-    def attic(name)
+    def attic(name=nil)
+      return singleton_class if name.nil?
+
       name = name.normalize
 
       self.attic_variables << name unless attic_variable? name
 
-      _safe_name = "@_attic_#{name}"
-      instance_variable_set(_safe_name, name)
+      safe_name = "@_attic_#{name}"
+      instance_variable_set(safe_name, name)
     end
 
     def attic_variable?(name)
@@ -57,13 +62,5 @@ module Attic
     def normalize(name)
       name.to_s.gsub(/\@[\?\!\=]$/, '_').to_sym
     end
-    # def attic
-    #   raise NoSingleton, self, caller unless attic?
-    #
-    #   singleton_class
-    #
-    # rescue TypeError
-    #   NoSingleton.add_member self
-    # end
   end
 end
