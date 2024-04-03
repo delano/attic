@@ -6,7 +6,7 @@
 # This error is raised when an attempt is made to access the
 # attic of an object which does not have a singleton class.
 #
-# This is a RuntimeError because it is not an exceptional
+# This is a TypeError because it is not an exceptional
 # condition. It is simply a condition that is not supported
 # by the Attic module.
 #
@@ -18,7 +18,7 @@
 #     attic :name, :age
 #   end
 #
-class NoSingletonError < RuntimeError
+class NoSingletonError < TypeError
   unless defined?(MEMBERS)
     # A Set of classes which do not have singleton classes
     # (i.e. meta classes). This is used to prevent an exception
