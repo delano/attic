@@ -1,39 +1,65 @@
-# Attic - v0.5
+# Attic - v0.6-RC1 (2023-04-19)
 
-A place to hide private instance variables in your Ruby objects.
+A place to hide private instance variables in your Ruby objects: in the attic.
+
 
 ## Example
 
 ```ruby
-require 'attic'
+    require 'attic'
 
-class String
-  extend Attic
-  attic :timestamp
-end
+    class String
+      extend Attic
+      attic :timestamp
+    end
 
-a = "anything"
-a.timestamp = "1980-11-18"
-a.instance_variables                      # => []
-a.timestamp                               # 1980-11-18
+    a = "anything"
+    a.timestamp = "1990-11-18"
+    a.instance_variables                      # => []
+    a.timestamp                               # 1990-11-18
 
-a.attic_variables                         # => [:timestamp]
+    a.attic_variables                         # => [:timestamp]
 
-a.attic_variable_set :tags, [:a, :b, :c]
-a.attic_variable_get :tags                # [:a, :b, :c]
+    a.attic_variable_set :tags, [:a, :b, :c]
+    a.attic_variable_get :tags                # [:a, :b, :c]
 
-a.attic_variables                         # => [:timestamp, :tags]
+    a.attic_variables                         # => [:timestamp, :tags]
 ```
 
-## Some objects have no metaclasses
+## More details
 
-Symbol and Fixnum objects do not have metaclasses so instance variables are hidden in the object itself.
+### Objects without singleton classes
 
+Symbol, Integer, Float, TrueClass, FalseClass, and NilClass are all objects that do not have singleton classes. TrueClass, FalseClass, and NilClass are all singletons themselves.
+
+These objects do not have metaclasses so the attic is hidden in the object itself.
+
+### Play around with it
+
+```shell
+    $ irb -r attic
+```
 
 ## Installation
 
-Via Rubygems, one of:
-
-```bash
+```shell
     $ gem install attic
 ```
+
+```shell
+    $ bundle install attic
+```
+
+or via download:
+* [attic-latest.tar.gz](https://github.com/delano/attic/tarball/latest)
+* [attic-latest.zip](https://github.com/delano/attic/zipball/latest)
+
+
+## Credits
+
+* (@delano) Delano Mandelbaum
+
+
+## License
+
+MIT
