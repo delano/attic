@@ -159,7 +159,7 @@ module Attic
     end
 
   rescue TypeError => e
-    raise NoSingleton, obj, caller
+    raise NoSingletonError, obj, caller
   end
 
   # A class method for defining variables to store in the attic.
@@ -201,6 +201,16 @@ module Attic
     end
 
     attic_variables  # only after defining new attic vars
+  end
+
+  def attic?
+    return false if NoSingletonError.member? self
+
+    singleton_class?
+
+  rescue TypeError
+    NoSingletonError.add_member self
+    false
   end
 
   # Returns an Array of attic variables for the current class.

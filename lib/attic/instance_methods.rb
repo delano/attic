@@ -8,7 +8,7 @@ module Attic
   module InstanceMethods
 
     def attic
-      raise NoSingleton, self, caller unless attic?
+      raise NoSingletonError, self, caller unless attic?
 
       singleton_class
 

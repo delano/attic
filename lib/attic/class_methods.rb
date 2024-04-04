@@ -40,6 +40,8 @@ module Attic
 
       safe_name = "@_attic_#{name}"
       instance_variable_set(safe_name, name)
+    rescue TypeError => e
+      raise NoSingletonError, name, caller
     end
 
     def attic_variable?(name)
