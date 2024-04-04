@@ -1,41 +1,51 @@
-require 'attic'
-  
-## can extend Attic
-class ::Worker
+require_relative '../lib/attic'
+
+#
+# Tests for the Attic module
+#
+
+## A class we define can extend Attic
+class ::ExampleClass
   extend Attic
-  def kind() :true end
+  def kind() :unlikely_value end
 end
-# 1.9                             # 1.8
-Worker.methods.member?(:attic) || Worker.methods.member?('attic')
+ExampleClass.methods.member?(:attic)
 #=> true
-  
-## can't include Attic raises exception
+
+## Trying to include Attic raises an exception
 begin
-  class ::Worker
+  class ::ExampleClass
     include Attic
   end
-rescue => RuntimeError
-  :success
+rescue => e
+  e.class
 end
-#=> :success
+#=> RuntimeError
 
-## can define attic attribute
-Worker.attic :size
-w = Worker.new
-#w.attic :size
-p Worker.instance_methods(false)
-p Worker.methods.sort
+## Can define attic variables at class level
+ExampleClass.attic :size
+w = ExampleClass.new
 w.respond_to? :size
-#=> true 
-  
-## can access attic attributes explicitly"
-w = Worker.new
+#=> true
+
+## Accessing attic vars at the instance level fails
+begin
+  w = ExampleClass.new
+  w.attic :size, 2
+rescue => e
+  e.class
+end
+#=> NoMethodError
+
+## Can access attic vars the long way though
+w = ExampleClass.new
 w.attic_variable_set :size, 2
 w.attic_variable_get :size
 #=> 2
-  
-## won't define a method if on already exists
-Worker.attic :kind
-a = Worker.new
+
+## Won't clobber an existing method with the same name
+## NOTE: But also won't tell you it didn't define the method
+ExampleClass.attic :kind
+a = ExampleClass.new
 a.kind
-#=> :true
+#=> :unlikely_value
