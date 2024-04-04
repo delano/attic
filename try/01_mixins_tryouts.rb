@@ -9,65 +9,57 @@ NoMetaClass < RuntimeError
 #=> true
 
 ## Has a pre-populated array of built-ins without a metaclass
-Object::NOMETACLASS
-#=> [Symbol, Integer]
-
-## The pre-populated array of built-ins is frozen
-Object::NOMETACLASS.frozen?
-#=> true
+begin
+    Object::NOMETACLASS
+rescue NameError => e
+    e.class
+end
+#=> NameError
 
 ## Has Object#metaclass method
 Object.new.respond_to? :metaclass
+#=> false
+
+## Has Object#singleton_class method
+Object.new.respond_to? :singleton_class
 #=> true
 
-## Object#metaclass is a class
-Object.new.metaclass.class
+## Object#singleton_class is a class
+Object.new.singleton_class.class
 #=> Class
 
-## Object#metaclass is a class
-Object.new.metaclass.object_id.class
+## Object#singleton_class is a class
+Object.new.singleton_class.object_id.class
 #=> Integer
 
-## Object#metaclass is a class
+## Object#singleton_class is a class
 a = Object.new
 b = Object.new
-a.metaclass.object_id == b.metaclass.object_id
+a.singleton_class.object_id == b.singleton_class.object_id
 #=> false
 
-## Object#metaclass is an Object class
-Object.new.metaclass.superclass
+## Object#singleton_class is an Object class
+Object.new.singleton_class.superclass
 #=> Object
 
-## Object#metaclass is equivalent to `class << self; self; end;`
+## Object#singleton_class is equivalent to `class << self; self; end;`
 a = Object.new
-a.metaclass == (class << a; self; end)
+a.singleton_class == (class << a; self; end)
 #=> true
 
-## Integer doesn't have a metaclass
-Integer.nometaclass?
-#=> true
-
-## Symbol doesn't have a metaclass
-Symbol.nometaclass?
-#=> true
-
-## Object has a metaclass
-Object.nometaclass?
+## Integer doesn't have a singleton_class
+Integer.singleton_class?
 #=> false
 
-## Integer has a metaclass
-Integer.metaclass?
-#=> true
+## Symbol doesn't have a singleton_class
+Symbol.singleton_class?
+#=> false
 
-## Symbol has a metaclass
-Symbol.metaclass?
-#=> true
+## Object has a singleton_class
+Object.singleton_class?
+#=> false
 
-## Object has a metaclass
-Object.metaclass?
-#=> true
-
-## Object#metaclass is equivalent to Object#singleton_class
+## Object#singleton_class is equivalent to Object#singleton_class
 a = Object.new
-a.metaclass == a.singleton_class
+a.singleton_class == a.singleton_class
 #=> true
