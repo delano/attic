@@ -1,4 +1,4 @@
-# Attic - v1.0-RC1 (2023-03-15)
+# Attic - v1.0-RC1 (2024-04-01)
 
 A place to hide private instance variables in your Ruby objects: in the attic.
 
@@ -10,6 +10,7 @@ Like, _why though_? Well sometimes you want to hide thing from the public interf
 
 
 ### Example
+
 
 ```ruby
     require 'attic'
@@ -138,10 +139,6 @@ which produced the same results for both.
       {:value=>nil,         :class=>NilClass,     :attic=>[true, 2844139080]}
     ]
 ```
-
-## Credits
-
-* (@delano) Delano Mandelbaum
 
 
 ## License
