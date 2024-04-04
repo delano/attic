@@ -2,6 +2,7 @@
 
 A place to hide private instance variables in your Ruby objects: in the attic.
 
+
 ## Example
 
 ```ruby
