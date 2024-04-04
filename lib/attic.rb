@@ -120,8 +120,10 @@ module Attic
     obj.include Attic::ClassMethods
   end
 
+  # Friendly exception to say we're not to be included
+  #
   def self.included(obj)
-    raise Runtime, "Did you to `extend Attic`` in #{obj}"
+    raise RuntimeError, "Did you mean to `extend Attic`` in #{obj}"
   end
 
   def self.extended(obj)
@@ -164,8 +166,9 @@ module Attic
   # * +names+ is a list of variables names. Accessor methods are
   #   created for each variable name in the list.
   #
-  # Returns the list of attic variable names or if no names were
-  # given, returns the attic.
+  # Returns an Array of all attic variables for the current
+  # class unless no arguments are given in which case it
+  # returns its singleton.
   #
   # e.g.
   #
