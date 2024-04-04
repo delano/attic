@@ -146,15 +146,15 @@ module Attic
       attic_vars = self.attic_variables.clone
       klass.attic.instance_variable_set("@attic_variables", attic_vars)
     end
-    if method_defined? :instance_variables
-      instance_variables_orig = instance_method(:instance_variables)
-      define_method :instance_variables do
-        ret = _instance_variables_orig.bind(self).call.clone
+    if obj.method_defined? :instance_variables
+      instance_variables_orig = obj.instance_method(:instance_variables)
+      obj.define_method :instance_variables do
+        ret = instance_variables_orig.bind(self).call.clone
         ret.reject! { |v| v.to_s =~ /^@___?attic/ }  # match 2 or 3 underscores
         ret
       end
-      define_method :all_instance_variables do
-        _instance_variables_orig.bind(self).call
+      obj.define_method :all_instance_variables do
+        instance_variables_orig.bind(self).call
       end
     end
 
