@@ -1,6 +1,7 @@
-# Attic - v1.0-RC1 (2023-04-19)
+# Attic - v0.6-RC1 (2023-04-19)
 
 A place to hide private instance variables in your Ruby objects: in the attic.
+
 
 ## Example
 
