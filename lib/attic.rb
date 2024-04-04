@@ -110,21 +110,13 @@ module Attic
   def self.extended(o)
     # This class has already been extended. 
     return if o.ancestors.member? Attic::InstanceMethods
-    
-    
-    ## NOTE: This is just a reminder for a more descerning way to 
-    ## include the meta methods, instead of using a global mixin. 
-    ##o.class_eval do
-    ##  include ObjectHelpers
-    ##end
-    # Create an instance method that returns the attic variables. 
+
+    # Create an instance method that returns the attic variables.
     o.send :include, Attic::InstanceMethods
-    #p [:extend, self, o]
-    
+
     o.metaclass.instance_variable_set("@attic_variables", [])
     o.class_eval do
       def self.inherited(o2)
-        #p [:inherit, self, o2]
         attic_vars = self.attic_variables.clone
         o2.metaclass.instance_variable_set("@attic_variables", attic_vars)
       end
