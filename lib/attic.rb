@@ -111,7 +111,6 @@ module Attic
 
     def attic_variable_set(name, val)
       attic_variables << name unless attic_variable? name
-      require 'pry'; binding.pry
       metaclassified.instance_variable_set("@___attic_#{name}", val)
     end
 
