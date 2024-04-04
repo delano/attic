@@ -10,7 +10,7 @@ NoMetaClass < RuntimeError
 
 ## Has a pre-populated array of built-ins without a metaclass
 Object::NOMETACLASS
-#=> [Symbol, Fixnum]
+#=> [Symbol, Integer]
 
 ## The pre-populated array of built-ins is frozen
 Object::NOMETACLASS.frozen?
@@ -43,8 +43,8 @@ a = Object.new
 a.metaclass == (class << a; self; end)
 #=> true
 
-## Fixnum doesn't have a metaclass
-Fixnum.nometaclass?
+## Integer doesn't have a metaclass
+Integer.nometaclass?
 #=> true
 
 ## Symbol doesn't have a metaclass
@@ -55,8 +55,8 @@ Symbol.nometaclass?
 Object.nometaclass?
 #=> false
 
-## Fixnum has a metaclass
-Fixnum.metaclass?
+## Integer has a metaclass
+Integer.metaclass?
 #=> true
 
 ## Symbol has a metaclass

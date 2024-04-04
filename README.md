@@ -30,7 +30,7 @@ A place to hide private instance variables in your Ruby objects: in the attic.
 
 ### Objects without singleton classes
 
-Symbol, Integer, Float, TrueClass, FalseClass, NilClass, and Fixnum are all objects that do not have singleton classes. TrueClass, FalseClass, and NilClass are all singletons themselves. Fixnum is a singleton of Integer.
+Symbol, Integer, Float, TrueClass, FalseClass, and NilClass are all objects that do not have singleton classes. TrueClass, FalseClass, and NilClass are all singletons themselves.
 
 These objects do not have metaclasses so the attic is hidden in the object itself.
 
