@@ -49,7 +49,7 @@ Like, _why though_? Well sometimes you want to hide thing from the public interf
 
 ### **Objects without singleton classes
 
-Symbol, Integer, Float, TrueClass, FalseClass, NilClass, and Fixnum are all objects that do not have singleton classes. TrueClass, FalseClass, and NilClass are all singletons themselves. Fixnum is a singleton of Integer.
+Symbol, Integer, Float, TrueClass, FalseClass, NilClass, and Integer are all objects that do not have singleton classes. TrueClass, FalseClass, and NilClass are all singletons themselves. Integer is a singleton of Integer.
 
 These objects do not have metaclasses so the attic is hidden in the object itself.
 

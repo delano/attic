@@ -10,7 +10,7 @@ class Object
 
   unless defined?(::Object::NOMETACLASS)
     # An Array of classes which do not have metaclasses.
-    NOMETACLASS = [Symbol, Fixnum].freeze
+    NOMETACLASS = [Symbol, Integer].freeze
   end
 
   def nometaclass?
