@@ -101,7 +101,6 @@ require_relative "attic/instance_methods"
 #
 module Attic
   VERSION = '0.9.0-RC1'.freeze unless defined?(VERSION)
-  attr_reader :all_attic_variables
 
   # A convenince method at the class level for including
   # ConstructMethods in the given object specifically.
@@ -178,12 +177,12 @@ module Attic
   # * <tt>String#timestamp</tt> for setting the value
   #
   def attic(*names)
-    return all_attic_variables if names.empty?
+    return singleton_class if names.empty?
 
     names.each do |name|
       next if attic_variable? name
 
-      self.all_attic_variables << name
+      self.attic_variables << name
 
       unless method_defined?(name)
         define_method(name) do
@@ -198,7 +197,7 @@ module Attic
       end
     end
 
-    all_attic_variables
+    attic_variables  # only after defining new attic vars
   end
 
   # Returns an Array of attic variables for the current class.
@@ -208,12 +207,11 @@ module Attic
   #     String.attic :timestamp
   #     String.attic_variables     # => [:timestamp]
   #
-  # def attic_variables
-  #   a = attic.instance_variable_get('@attic_variables')
-  #   a ||= attic.instance_variable_set('@attic_variables', [])
-  #   a
-  # end
-  # alias attic_vars attic_variables
+  def attic_variables
+    a = attic.instance_variable_get('@attic_variables')
+    a ||= attic.instance_variable_set('@attic_variables', [])
+    a
+  end
 
   def attic_variable?(name)
     attic_variables.member? name
