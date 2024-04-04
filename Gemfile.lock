@@ -40,11 +40,12 @@ GEM
     tryouts (2.1.1)
       sysinfo (>= 0.7.3)
     unicode-display_width (2.4.2)
-    yard (0.9.26)
+    yard (0.9.36)
 
 PLATFORMS
   arm64-darwin-22
   universal-darwin-20
+  x86_64-linux
 
 DEPENDENCIES
   byebug
