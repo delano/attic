@@ -49,3 +49,14 @@ ExampleClass.attic :kind
 a = ExampleClass.new
 a.kind
 #=> :unlikely_value
+
+# If we try to add an attic variable to an instance,
+# we get an ArgumentError (we can only add attic vars
+# at the class level).
+a = ExampleClass.new
+begin
+  a.attic :colour
+rescue => e
+ e.class
+end
+#=> ArgumentError

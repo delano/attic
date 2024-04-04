@@ -52,6 +52,7 @@ module Attic
     end
 
     def attic_variable_set(name, val)
+      raise FrozenError, self, caller if frozen?
       attic_variables << name unless attic_variable? name
       attic.instance_variable_set("@___attic_#{name}", val)
     end
