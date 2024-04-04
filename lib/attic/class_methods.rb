@@ -21,8 +21,8 @@ module Attic
       # for the object. In either case, objects that cannot have
       # cannot have a dedicated singleton class (e.g. nil, true,
       # false) will raise a TypeError. We rescue this and add the
-      # object to the NoSingletonError list so we don't have to
-      # keep trying to access its singleton class.
+      # object to the NoSingletonError list so we don't keep
+      # trying to access its singleton class over and over.
       !singleton_class.nil?
 
     rescue TypeError
