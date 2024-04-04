@@ -2,9 +2,7 @@
 
 source "https://rubygems.org"
 
-ruby '>= 3.1'
-
-git_source(:github) { |repo_name| "https://github.com/#{repo_name}" }
+ruby '>= 2.6.8', '< 4.0'
 
 # bundle install --without production
 # bundle install --with development

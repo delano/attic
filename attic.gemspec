@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name        = "attic"
-  s.version     = "1.0.0-RC2"
+  s.version     = "1.0.0-RC4"
   s.summary     = "When in doubt, store it in the attic"
   s.description = "Attic: a place to hide metadata about the class or variable itself (e.g. SHA hash summaries)."
   s.authors     = ["Delano Mandelbaum"]
