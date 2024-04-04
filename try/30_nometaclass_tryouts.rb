@@ -1,16 +1,26 @@
-require 'attic'
+require_relative "../lib/attic"
+
+Attic.construct Symbol #, :name
 
 ## has list of no metaclass classes
-Object::NOMETACLASS
+NoSingletonError::MEMBERS
 #=> [Symbol, Integer]
 
-## Symbol metaclass does not raise an exception
+# ## Symbol metaclass does not raise an exception
+# begin
+#   :any.attic.class
+# rescue NoSingletonError
+#   :failed
+# end
+# #=> :failed
+
+## Accessing Symbol metaclass raises an exception
 begin
-  :any.metaclass.class
-rescue NoMetaClass
+  :any.attic.class
+rescue NoSingletonError
   :failed
 end
-#=> Class
+#=> :failed
 
 ## Symbol instances don't cross streams
 Symbol.extend Attic
@@ -20,13 +30,13 @@ a.name = :roger
 [a.name, b.name]
 #=> [:roger, nil]
 
-## metaclass? method exists
+## attic? method exists
 Symbol.extend Attic
-:any.respond_to? :metaclass?
+:any.respond_to? :attic?
 #=> true
 
-## metaclass? method is false for a Symbol", false do
-:any.metaclass?
+## attic? method is false for a Symbol", false do
+:any.attic?
 #=> false
 
 ## A Symbol's attic vars appear in `all_instance_variables` do

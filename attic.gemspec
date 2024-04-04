@@ -1,20 +1,23 @@
-@spec = Gem::Specification.new do |s|
-	s.name = "attic"
-	s.version = "0.6-RC1"
-	s.summary = "When in doubt, store it in the attic"
-	s.description = "Attic: a place to hide metadata about the class or variable itself (e.g. SHA hash summaries)."
-	s.author = "Delano Mandelbaum"
-	s.email = "gems@solutious.com"
-	s.homepage = "https://github.com/delano/attic"
-  s.executables = %w[]
-  s.require_paths = %w[lib]
-  s.extra_rdoc_files = %w[README.md]
-  s.licenses = ["MIT"]  # https://spdx.org/licenses/MIT-Modern-Variant.html
-  s.rdoc_options = ["--line-numbers", "--title", s.summary, "--main", "README.md"]
-  s.files = %w(
-    README.md
-    Rakefile
-    attic.gemspec
-    lib/attic.rb
-  )
+Gem::Specification.new do |s|
+  s.name        = "attic"
+  s.version     = "0.9.0-rc2"
+  s.summary     = "When in doubt, store it in the attic"
+  s.description = "Attic: a place to hide metadata about the class or variable itself (e.g. SHA hash summaries)."
+  s.authors     = ["Delano Mandelbaum"]
+  s.email       = "gems@solutious.com"
+  s.homepage    = "https://github.com/delano/attic"
+  s.license     = "MIT"
+
+  s.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
+  s.bindir        = "exe"
+  s.executables   = s.files.grep(%r{^exe/}) { |f| File.basename(f) }
+  s.require_paths = ["lib"]
+
+  s.required_ruby_version = Gem::Requirement.new(">= 2.6.0")
+
+  s.add_dependency "rake", ">= 13.0.6"
+
+  # Add development dependencies
+  s.add_development_dependency "rspec", "~> 3.0"
+  s.add_development_dependency "rubocop", "~> 1.0"
 end
