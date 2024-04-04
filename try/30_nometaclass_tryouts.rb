@@ -39,6 +39,14 @@ Symbol.extend Attic
 :any.attic?
 #=> false
 
+## A String's attic vars appear in `all_instance_variables` do
+String.extend Attic
+String.attic :_name
+a, b = 'String1', 'String2'
+a._name = :roger
+a.all_instance_variables
+#=> [:@___attic_name]
+
 ## A Symbol's attic vars appear in `all_instance_variables` do
 Symbol.extend Attic
 Symbol.attic :_name
