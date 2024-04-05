@@ -100,7 +100,7 @@ require_relative "attic/instance_methods"
 # nil.attic.object_id #=> 800
 #
 module Attic
-  VERSION = '1.0.0'.freeze unless defined?(VERSION)
+  VERSION = "1.0.1".freeze unless defined?(VERSION)
 
   # A convenince method at the class level for including
   # ConstructMethods in the given object specifically.
