@@ -12,5 +12,5 @@ group "development" do
   gem "pry"
   gem "pry-doc"
   gem "rubocop"
-  gem "tryouts", '2.2.0.pre.RC1'
+  gem "tryouts", '~> 2.2.0'
 end

@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name        = "attic"
-  s.version     = "1.0.0-RC4"
+  s.version     = "1.0.0"
   s.summary     = "When in doubt, store it in the attic"
   s.description = "Attic: a place to hide metadata about the class or variable itself (e.g. SHA hash summaries)."
   s.authors     = ["Delano Mandelbaum"]
@@ -15,9 +15,8 @@ Gem::Specification.new do |s|
 
   s.required_ruby_version = Gem::Requirement.new(">= 2.6.0")
 
-  s.add_dependency "rake", ">= 13.0.6"
+  s.add_dependency "rake", "~> 13.0.6"
 
-  # Add development dependencies
   s.add_development_dependency "rspec", "~> 3.0"
   s.add_development_dependency "rubocop", "~> 1.0"
 end
