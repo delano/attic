@@ -1,6 +1,8 @@
 
 # Attic: A special place to store instance variables.
 
+require "set"
+
 class NoMetaClass < RuntimeError
 end
 
